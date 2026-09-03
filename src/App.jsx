@@ -74,7 +74,7 @@ const defaultProducts = [
 function App() {
   const [products, setProducts] = useState(() => {
     try {
-      const savedProducts = localStorage.getItem('products')
+      const savedProducts = localStorage.getItem('store_products_v2')
       return savedProducts ? JSON.parse(savedProducts) : defaultProducts
     } catch (e) {
       return defaultProducts
@@ -85,7 +85,7 @@ function App() {
 
   useEffect(() => {
     try {
-      localStorage.setItem('products', JSON.stringify(products))
+      localStorage.setItem('store_products_v2', JSON.stringify(products))
     } catch (e) {
       console.error(e)
     }
