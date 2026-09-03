@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
-import Layout from './components/Layout'
-import Home from './pages/Home'
-import Products from './pages/Products'
+import Layout from './components/Layout.jsx'
+import Home from './pages/Home.jsx'
+import Products from './pages/Products.jsx'
 
 const defaultProducts = [
   { id: 1, title: 'Product 1', category: 'Electronics', price: '150', description: 'Sample description 1', image: 'https://via.placeholder.com/150' },
@@ -11,14 +11,22 @@ const defaultProducts = [
 
 function App() {
   const [products, setProducts] = useState(() => {
-    const savedProducts = localStorage.getItem('products')
-    return savedProducts ? JSON.parse(savedProducts) : defaultProducts
+    try {
+      const savedProducts = localStorage.getItem('products')
+      return savedProducts ? JSON.parse(savedProducts) : defaultProducts
+    } catch (e) {
+      return defaultProducts
+    }
   })
 
   const [showAnnouncement, setShowAnnouncement] = useState(true)
 
   useEffect(() => {
-    localStorage.setItem('products', JSON.stringify(products))
+    try {
+      localStorage.setItem('products', JSON.stringify(products))
+    } catch (e) {
+      console.error(e)
+    }
   }, [products])
 
   useEffect(() => {
@@ -48,7 +56,16 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path="products" element={<Products products={products} onAddProduct={handleAddProduct} onDeleteProduct={handleDeleteProduct} />} />
+          <Route 
+            path="products" 
+            element={
+              <Products 
+                products={products} 
+                onAddProduct={handleAddProduct} 
+                onDeleteProduct={handleDeleteProduct} 
+              />
+            } 
+          />
         </Route>
       </Routes>
     </div>
